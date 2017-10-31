@@ -11,7 +11,7 @@ def load_dataset(file, rows=None):
     Return Pandas DataFrame with the specified number of rows
     """
     r = rows or 20
-    
+
     dataset = pd.read_csv(file, header=None, names=['sentiment', 'text'], nrows=r)
     
     X = dataset['text']
@@ -54,6 +54,7 @@ def load_processed_dataset(file=None, maxseq=None, maxword=None, **kwargs):
 
 def load_embeddings(dim=True, embeddings=True) ->dict:
     """
+    Uses GloVe (global vectors)
     Returns:
       If dimension and embeddings are true it returns the
         pickled dict object and the dimensions
