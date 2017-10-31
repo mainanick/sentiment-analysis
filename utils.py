@@ -16,7 +16,12 @@ def load_dataset(file, rows=None):
     
     X = dataset['text']
     Y = dataset['sentiment']
-
+    
+    """
+    Replace yelp dataset polarity
+    from 1=negative, 2=positive
+    to   0=negative, 1= positive
+    """
     Y = Y.replace(1, 0)
     Y = Y.replace(2, 1)
 

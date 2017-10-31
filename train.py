@@ -12,7 +12,8 @@ TRAIN_FILE_TITLE = 'YELP REVIEWS POLARITY DATASET'
 TRAIN_FILE = 'datasets/yelp/train.csv'
 TEST_FILE = 'datasets/yelp/test.csv'
 
-POLARITY_LABEL = {'negative': 1, 'positive': 2}
+
+POLARITY_LABEL = {'negative': 0, 'positive': 1}
 
 MAX_SEQUENCE = 1000
 MAX_WORDS = 20000
