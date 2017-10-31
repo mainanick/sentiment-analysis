@@ -61,3 +61,7 @@ Procfile
 
 #Sqlite Db
 *.sqlite3
+
+#Datasets
+datasets/
+
