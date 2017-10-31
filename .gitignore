@@ -65,3 +65,6 @@ Procfile
 #Datasets
 datasets/
 
+#GloVe
+glove/
+
