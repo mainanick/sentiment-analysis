@@ -55,19 +55,13 @@ def load_processed_dataset(file=None, maxseq=None, maxword=None, **kwargs):
 def load_embeddings(dim=True, embeddings=True) ->dict:
     """
     Uses GloVe (global vectors)
-    Returns:
-      If dimension and embeddings are true it returns the
-        pickled dict object and the dimensions
 
-      If embeddings is true and dim false returns embeddings only
-
-      If embeddings is false and dim true returns dim only
-
-    Example:
-      embeddings = load_embedding(dim=False)
-      dim = load_embedding(embeddings=False)
-
-      embeddings[<word>] Returns the coef of the word
+    Returns:      
+       Embeddings(dict) and Dimensions(int) if both dim and embeddings are set to true      
+       
+       Dimensions(int) if embeddings is false    
+       
+       Embeddings(dict) if dim is false
     """
     if dim and embeddings:
         return pickle.load(open('glove/glove.twitter.27B.25d.dict.p', 'rb')), 25
