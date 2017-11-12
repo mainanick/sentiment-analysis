@@ -13,7 +13,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 MAX_SEQUENCE = 1000
 MAX_WORDS = 2000
-POLARITY_LABEL = {'negative': 0, 'positive': 1}
+POLARITY_LABEL = {0:'negative', 1:'positive'}
 TRAIN_FILE = '../datasets/umich-sentiment/train.csv'
 
 
