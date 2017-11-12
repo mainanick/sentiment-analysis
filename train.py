@@ -35,9 +35,9 @@ def gen_model():
     GlobalMaxPooling1D(),
     Dropout(0.3),
     Dense(128, activation='relu'),
-    Dense(len(POLARITY_LABEL), activation='softmax')
+    Dense(1, activation='softmax')
     ])
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['acc'])
+    model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
     
     return model
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     """
     os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
     nrows = 5000
-    X, Y, word_index = load_processed_dataset(TRAIN_FILE, maxword=MAX_WORDS, rows=nrows, tokenize=True)
+    X, Y, word_index = load_processed_dataset(TRAIN_FILE, rows=nrows)
     
     split = nrows-int((nrows/10))
     
@@ -82,5 +82,5 @@ if __name__ == "__main__":
 
     
     model = gen_model()
-    model.fit(X_train, Y_train, validation_data=[X_test, Y_test], batch_size=256, epochs=10)
-    model.save("sentiment.h5")
+    model.fit(X_train, Y_train, validation_data=[X_test, Y_test], batch_size=200, epochs=8)
+    # model.save("sentiment.h5")

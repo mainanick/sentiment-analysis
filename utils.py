@@ -1,16 +1,17 @@
 import pickle
+
 import numpy as np
 import pandas as pd
+from keras.preprocessing.sequence import pad_sequences
+from keras.preprocessing.text import Tokenizer
+from keras.utils.np_utils import to_categorical
 
 
 def load_dataset(file, rows=None):
-    if not file:
-        return None, None
-    
     """
     Return Pandas DataFrame with the specified number of rows
     """
-    r = rows or 20
+    r = rows or 10
 
     dataset = pd.read_csv(file, header=None, names=['sentiment', 'text'], nrows=r)
     
@@ -28,16 +29,12 @@ def load_dataset(file, rows=None):
     return X.tolist(), Y.tolist()
 
 
-def load_processed_dataset(file=None, maxseq=None, maxword=None, **kwargs):
-    from keras.preprocessing.text import Tokenizer
-    from keras.preprocessing.sequence import pad_sequences
-    from keras.utils.np_utils import to_categorical
+def load_processed_dataset(file, maxseq=None, maxword=None, **kwargs):
+    
 
     MAX_SEQUENCE = maxseq or 1000
-    MAX_WORDS = maxword or 20000
+    MAX_WORDS = maxword or 20000 # 20000 most common words
 
-    if not file:
-        return None, None
 
     rows = kwargs.get('rows', None)
     X_train, Y_train = load_dataset(file, rows)
@@ -49,13 +46,13 @@ def load_processed_dataset(file=None, maxseq=None, maxword=None, **kwargs):
     sequences = tokenizer.texts_to_sequences(X_train)
     
     X1_train = pad_sequences(sequences, maxlen=MAX_SEQUENCE)
-
-    Y1_train = to_categorical(np.asarray(Y_train), 2)
-
+    # Y1_train = to_categorical(np.asarray(Y_train), 2)
     del X_train
-    del Y_train
+    # del Y_train
     
-    return X1_train, Y1_train, word_index
+    return X1_train, np.asarray(Y_train), word_index
+
+
 
 def load_embeddings(dim=True, embeddings=True) ->dict:
     """
@@ -74,4 +71,3 @@ def load_embeddings(dim=True, embeddings=True) ->dict:
         return 25
     if not dim and embeddings:
         return pickle.load(open('glove/glove.twitter.27B.25d.dict.p', 'rb'))
-    return None, None
