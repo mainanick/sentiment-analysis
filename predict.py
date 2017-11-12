@@ -10,20 +10,21 @@ import keras.preprocessing.text as txt
 from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
-os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 app = Flask("sentiment")
 
 
 def load_model():
-    json_file = open("model/model.json", 'r')    
-    json_model = json_file.read()    
+    json_file = open("model/model.json", 'r')
+    json_model = json_file.read()
     json_file.close()
-    
+
     model = model_from_json(json_model)
     model.load_weights('model/weights.h5')
-    model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['acc'])
-    
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='rmsprop', metrics=['acc'])
+
     return model, tf.get_default_graph()
 
 
@@ -49,14 +50,16 @@ def process(sentence):
     MAX_WORDS = 2000
 
     sequences = process_sentence(sentence)
-    
+
     tokenizer = Tokenizer(num_words=MAX_WORDS)
-    
+
     X = pad_sequences(sequences, maxlen=MAX_SEQUENCE)
-    
+
     return X
 
+
 model, graph = load_model()
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -67,10 +70,10 @@ def predict():
 
     with graph.as_default():
         pred = model.predict(X)
-    
-    POLARITY_LABEL = {0: 'negative', 1:'positive'}
+
+    POLARITY_LABEL = {0: 'negative', 1: 'positive'}
     sentiment = POLARITY_LABEL[np.argmax(pred)]
-    
+
     response = {"sentence": sentence, "sentiment": sentiment}
 
     return jsonify(response)

@@ -1,8 +1,3 @@
-
-# coding: utf-8
-
-# In[1]:
-
 import os
 
 import numpy as np
@@ -14,14 +9,12 @@ from keras.preprocessing.text import Tokenizer
 from keras.utils.np_utils import to_categorical
 
 
-# In[2]:
 
 os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 app = Flask("sentiment")
 
 
-# In[3]:
 
 def load_model():
     json_file = open("../model/model.json", 'r')    
@@ -35,7 +28,7 @@ def load_model():
     return model, tf.get_default_graph()
 
 
-# In[4]:
+
 
 def process(sentence):
     MAX_SEQUENCE = 1000
@@ -54,7 +47,7 @@ def process(sentence):
     return X
 
 
-# In[5]:
+
 
 model, graph = load_model()
 
