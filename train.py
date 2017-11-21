@@ -12,17 +12,19 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 MAX_SEQUENCE = 1000
-MAX_WORDS = 2000
+MAX_WORDS = 20000
 POLARITY_LABEL = {0:'negative', 1:'positive'}
-TRAIN_FILE = '../datasets/umich-sentiment/train.csv'
+TRAIN_FILE = 'datasets/yelp/train.csv'
 
 
 def load_dataset(file, rows):
 
-    dataset = pd.read_csv(file, nrows=rows)
+    dataset = pd.read_csv(file, header=None, names=['sentiment', 'text'], nrows=rows)
 
     X = dataset['text']
     Y = dataset['sentiment']
+    Y = Y.replace(1, 0)
+    Y = Y.replace(2, 1)
 
     return X.tolist(), Y.tolist()
 
@@ -54,7 +56,7 @@ def load_processed_dataset(file, maxseq=None, maxword=None, rows=None, **kwargs)
 
 
 def load_embeddings():
-    return pickle.load(open('../glove/glove.twitter.27B.25d.dict.p', 'rb')), 25
+    return pickle.load(open('glove/glove.twitter.27B.25d.dict.p', 'rb')), 25
 
 
 def embedding_layer(word_index):
@@ -101,10 +103,10 @@ def gen_model(sequences):
 
 
 X, Y, word_index = load_processed_dataset(
-    TRAIN_FILE, maxword=MAX_WORDS, rows=10, tokenize=True)
+    TRAIN_FILE, maxword=MAX_WORDS, rows=10000, tokenize=True)
 
 
-with open('../model/dict.json', 'w') as dictionary_file:
+with open('model/dict_yelp.json', 'w') as dictionary_file:
     json.dump(word_index, dictionary_file)
 
 sequences = embedding_layer(word_index)
@@ -112,12 +114,11 @@ sequences = embedding_layer(word_index)
 
 model = gen_model(sequences)
 
-# print(sequences.get_weights()[0][87])
-model.fit(X, Y, validation_split=0.1, batch_size=2, epochs=1)
+model.fit(X, Y, validation_split=0.1, batch_size=128, epochs=10)
 
-# model_json = model.to_json()
-# with open("../model/model.json", "w") as json_file:
-#     json_file.write(model_json)
+model_json = model.to_json()
+with open("model/model_yelp.json", "w") as json_file:
+    json_file.write(model_json)
 
-# model.save_weights("../model/weights.h5")
-# model.save("../model/sentiment.h5")
+model.save_weights("model/weights_yelp.h5")
+model.save("model/sentiment_yelp.h5")
