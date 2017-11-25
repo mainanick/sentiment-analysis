@@ -106,8 +106,8 @@ ENV/
 .mypy_cache/
 
 
-main.py
-
+#Jupyter notebooks
+notebooks/
 #Datasets
 datasets/
 
