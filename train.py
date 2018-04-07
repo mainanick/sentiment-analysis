@@ -65,12 +65,12 @@ def embedding_layer(word_index):
     matrix = np.zeros((MAX_WORDS, EMBEDDING_DIM))  # Embedding Matrix
     max_words = min(MAX_WORDS, len(word_index))
 
-    for word, i in word_index.items():
-        if i >= max_words:
+    for word, index in word_index.items():
+        if index >= max_words:
             continue
         vector = EMBEDDINGS.get(word, None)
         if vector is not None:
-            matrix[i] = vector
+            matrix[index] = vector
 
     layer = Embedding(MAX_WORDS,
                       EMBEDDING_DIM,
